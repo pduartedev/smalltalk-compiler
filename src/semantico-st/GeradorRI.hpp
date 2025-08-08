@@ -7,16 +7,24 @@
 #include "tree-st/StmMove.hpp"
 #include "tree-st/StmExp.hpp"
 #include "tree-st/StmCJump.hpp"
+#include "tree-st/StmJump.hpp"
 #include "tree-st/StmLabel.hpp"
 #include "tree-st/ExpTemp.hpp"
 #include "tree-st/ExpConst.hpp"
 #include "tree-st/ExpMem.hpp"
 #include "tree-st/ExpBinop.hpp"
 #include "tree-st/ExpCall.hpp"
+#include "tree-st/ExpList.hpp"
+#include "tree-st/ExpName.hpp"
 #include "tree-st/Operador.hpp"
 #include "src-gram-st/Funcao.hpp"
 #include "src-gram-st/Comando.hpp"
+#include "src-gram-st/ComandoWhile.hpp"
+#include "src-gram-st/ComandoIf.hpp"
+#include "src-gram-st/ComandoAtribuicao.hpp"
 #include "src-gram-st/Expressao.hpp"
+#include "src-gram-st/ExpressaoCondicional.hpp"
+#include "src-gram-st/ExpressaoRelacional.hpp"
 #include "frame-st/FrameFuncao.hpp"
 #include "frame-st/FrameAcesso.hpp"
 #include "frame-st/FrameAcessoNoFrame.hpp"
@@ -24,34 +32,40 @@
 #include <map>
 #include <string>
 
-class GeradorRI {
+class GeradorRI
+{
 private:
     int contador_temp;
     int contador_label;
-    ExpTemp* frame_pointer;
-    FrameFuncao* frame_atual;
-    
+    ExpTemp *frame_pointer;
+    FrameFuncao *frame_atual;
+
 public:
     GeradorRI();
     ~GeradorRI();
-    
+
     // Método principal de conversão
-    StmSeq* converterFuncao(Funcao* funcao, FrameFuncao* frame);
-    
+    StmSeq *converterFuncao(Funcao *funcao, FrameFuncao *frame);
+
     // Métodos auxiliares
-    Stm* converterComando(Comando* comando);
-    Exp* converterExpressao(Expressao* expressao);
-    Exp* gerarAcessoVariavel(const std::string& nome);
-    
+    Stm *converterComando(Comando *comando);
+    Exp *converterExpressao(Expressao *expressao);
+    Exp *gerarAcessoVariavel(const std::string &nome);
+    Stm *converterCondicional(ExpressaoCondicional *exp_cond);
+    Stm *converterWhile(ComandoWhile *cmd_while);
+    StmSeq *converterFuncaoRecursiva(ComandoIf *cond, ComandoAtribuicao *ret);
+    StmSeq *converterFuncaoRecursivaTemp(ComandoAtribuicao *temp_atrib, ComandoAtribuicao *ret);
+
     // Métodos para geração de temporários e labels
     std::string novoLabel();
-    ExpTemp* novoTemp();
-    
+    std::string novoLabel(const std::string &prefixo);
+    ExpTemp *novoTemp();
+
     // Método para converter operadores
-    Operador* converterOperador(const std::string& op);
-    
+    Operador *converterOperador(const std::string &op);
+
     // Método para imprimir RI
-    void imprimirRI(StmSeq* programa);
+    void imprimirRI(StmSeq *programa);
 };
 
 #endif

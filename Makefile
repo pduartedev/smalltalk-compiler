@@ -64,11 +64,14 @@ TREE_SOURCES = $(TREE_DIR)/Stm.cpp \
                $(TREE_DIR)/ExpMem.cpp \
                $(TREE_DIR)/ExpBinop.cpp \
                $(TREE_DIR)/ExpCall.cpp \
+               $(TREE_DIR)/ExpList.cpp \
                $(TREE_DIR)/StmMove.cpp \
                $(TREE_DIR)/StmExp.cpp \
                $(TREE_DIR)/StmCJump.cpp \
+               $(TREE_DIR)/StmJump.cpp \
                $(TREE_DIR)/StmLabel.cpp \
-               $(TREE_DIR)/StmSeq.cpp
+               $(TREE_DIR)/StmSeq.cpp \
+               $(TREE_DIR)/ExpName.cpp
 
 # Gerador de RI (Lab 5)
 RI_SOURCES = $(SRC_DIR)/GeradorRI.cpp

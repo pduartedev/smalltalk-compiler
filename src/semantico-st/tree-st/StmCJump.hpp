@@ -4,16 +4,20 @@
 #include "Stm.hpp"
 #include "Exp.hpp"
 
-class StmCJump : public Stm {
+class StmCJump : public Stm
+{
 public:
-    Exp* expressao_booleana;  // Substitui relop + left + right
+    // Versão com operador e operandos separados (padrão Appel)
+    std::string operador; // GT, LT, EQ, etc.
+    Exp *esquerda;
+    Exp *direita;
     std::string label_verdadeiro;
     std::string label_falso;
-    
-    StmCJump(Exp* expressao_booleana, const std::string& label_verdadeiro, const std::string& label_falso);
+
+    StmCJump(const std::string &operador, Exp *esquerda, Exp *direita, const std::string &label_verdadeiro, const std::string &label_falso);
     virtual ~StmCJump();
     virtual std::string toString() const override;
-    static StmCJump* criar(Exp* expressao_booleana, const std::string& label_verdadeiro, const std::string& label_falso);
+    static StmCJump *criar(const std::string &operador, Exp *esquerda, Exp *direita, const std::string &label_verdadeiro, const std::string &label_falso);
 };
 
 #endif

@@ -2,26 +2,31 @@
 #include <sstream>
 
 // ExpTemp
-ExpTemp::ExpTemp(int id, const std::string& nome) : id(id), nome(nome) {}
+ExpTemp::ExpTemp(int id, const std::string &nome) : id(id), nome(nome) {}
 
-std::string ExpTemp::toString() const {
-    if (!nome.empty()) {
-        return nome;
+std::string ExpTemp::toString() const
+{
+    if (!nome.empty())
+    {
+        return "TEMP(" + nome + ")";
     }
-    return "T" + std::to_string(id);
+    return "TEMP(T" + std::to_string(id) + ")";
 }
 
-ExpTemp* ExpTemp::criar(int id, const std::string& nome) {
+ExpTemp *ExpTemp::criar(int id, const std::string &nome)
+{
     return new ExpTemp(id, nome);
 }
 
 // ExpTempFramePointer
 ExpTempFramePointer::ExpTempFramePointer() : ExpTemp(-1, "FP") {}
 
-std::string ExpTempFramePointer::toString() const {
+std::string ExpTempFramePointer::toString() const
+{
     return "FP";
 }
 
-ExpTempFramePointer* ExpTempFramePointer::criar() {
+ExpTempFramePointer *ExpTempFramePointer::criar()
+{
     return new ExpTempFramePointer();
 }

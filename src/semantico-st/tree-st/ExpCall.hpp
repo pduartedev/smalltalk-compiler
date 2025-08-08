@@ -4,15 +4,22 @@
 #include "Exp.hpp"
 #include <vector>
 
-class ExpCall : public Exp {
+// Forward declaration
+class ExpList;
+
+class ExpCall : public Exp
+{
 public:
-    Exp* funcao;
-    std::vector<Exp*> argumentos;
-    
-    ExpCall(Exp* funcao, const std::vector<Exp*>& argumentos = {});
+    Exp *funcao;
+    ExpList *argumentos;
+
+    ExpCall(Exp *funcao, ExpList *argumentos = nullptr);
     virtual ~ExpCall();
     virtual std::string toString() const override;
-    static ExpCall* criar(Exp* funcao, const std::vector<Exp*>& argumentos = {});
+    static ExpCall *criar(Exp *funcao, ExpList *argumentos = nullptr);
+
+    // Método auxiliar para converter vector para ExpList
+    static ExpList *criarExpList(const std::vector<Exp *> &args);
 };
 
 #endif
