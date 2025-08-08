@@ -1,0 +1,11 @@
+Object subclass: MinhaClasse [
+    F18: max [
+        | i total |
+        total := 0.
+        i := 0.
+        [ i < max ] whileTrue: [
+            total := total + i.
+            i := i + 1
+        ]
+    ]
+]

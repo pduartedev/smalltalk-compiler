@@ -1,0 +1,11 @@
+Object subclass: MinhaClasse [
+    F8 [
+        | i total |
+        total := 0.
+        i := 0.
+        [ i < 4 ] whileTrue: [
+            total := total + i.
+            i := i + 1
+        ]
+    ]
+]

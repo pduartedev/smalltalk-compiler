@@ -1,0 +1,11 @@
+Object subclass: MinhaClasse [
+    F23: start com: limit e: step [
+        | i total |
+        i := start.
+        total := 0.
+        [ i < limit ] whileTrue: [
+            total := total + i.
+            i := i + step
+        ]
+    ]
+]

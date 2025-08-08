@@ -1,0 +1,9 @@
+Object subclass: MinhaClasse [
+    F21: x com: y e: z [
+        | r |
+        r := 0.
+        x > (y + z) ifTrue: [
+            r := 1
+        ]
+    ]
+]

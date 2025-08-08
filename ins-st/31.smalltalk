@@ -1,0 +1,9 @@
+Object subclass: MinhaClasse [
+    funcaoComParametrosNaoUsados: param1 e: param2 [
+        | varLocal1 varLocal2 resultado |
+        varLocal1 := 10.
+        varLocal2 := 20.
+        resultado := self calcular: varLocal1 e: varLocal2.
+        ^resultado
+    ]
+]

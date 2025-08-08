@@ -1,0 +1,9 @@
+Object subclass: MinhaClasse [
+    F14: x [
+        | y |
+        y := 0.
+        x > 2 ifTrue: [
+            y := 1
+        ]
+    ]
+]

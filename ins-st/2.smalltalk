@@ -1,0 +1,7 @@
+Object subclass: MinhaClasse [
+    f: a com: b e: c [
+        | d |
+        d := b * b - 4 * a * c.
+        ^d
+    ]
+]

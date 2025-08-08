@@ -1,0 +1,11 @@
+Object subclass: MinhaClasse [
+    F24: from com: to e: step [
+        | i product |
+        product := 1.
+        i := from.
+        [ i < to ] whileTrue: [
+            product := product * i.
+            i := i + step
+        ]
+    ]
+]

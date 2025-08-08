@@ -1,0 +1,6 @@
+Object subclass: MinhaClasse [
+    F27: base com: exp e: offset [
+        | result |
+        result := (self power: base com: exp) + offset
+    ]
+]

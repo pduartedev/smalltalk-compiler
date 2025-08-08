@@ -1,0 +1,7 @@
+Object subclass: MinhaClasse [
+    F4 [
+        | x |
+        x := 10.
+        x := x + 5
+    ]
+]

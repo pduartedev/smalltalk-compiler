@@ -1,0 +1,8 @@
+Object subclass: MinhaClasse [
+    fact: n [
+        n <= 1 ifTrue: [
+            ^1
+        ].
+        ^n * (self fact: n - 1)
+    ]
+]

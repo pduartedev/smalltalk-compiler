@@ -1,0 +1,7 @@
+Object subclass: MinhaClasse [
+    F20: a com: b e: c [
+        | x |
+        x := a + b + c.
+        x := x + 5
+    ]
+]

@@ -1,0 +1,33 @@
+Object subclass: MinhaClasse [
+    F28: n com: a e: b [
+        | sum |
+        sum := 0.
+        
+        n <= 0 ifTrue: [
+            ^0
+        ].
+        
+        a > b ifTrue: [
+            sum := a - b
+        ] ifFalse: [
+            sum := b - a
+        ].
+        
+        [ n > 0 ] whileTrue: [
+            sum := sum + n.
+            n := n - 1
+        ].
+        
+        n := 0.
+        [ n < 3 ] whileTrue: [
+            sum := sum + n.
+            n := n + 1
+        ].
+        
+        sum > 10 ifTrue: [
+            ^self F50: sum / 3 com: a e: b
+        ].
+        
+        ^sum
+    ]
+]

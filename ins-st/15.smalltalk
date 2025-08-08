@@ -1,0 +1,10 @@
+Object subclass: MinhaClasse [
+    F15: x [
+        | y |
+        x < 3 ifTrue: [
+            y := 0
+        ] ifFalse: [
+            y := 1
+        ]
+    ]
+]

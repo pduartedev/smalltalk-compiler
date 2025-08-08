@@ -1,0 +1,11 @@
+Object subclass: MinhaClasse [
+    F16: limit [
+        | i sum |
+        i := 0.
+        sum := 0.
+        [ i < limit ] whileTrue: [
+            sum := sum + i.
+            i := i + 1
+        ]
+    ]
+]

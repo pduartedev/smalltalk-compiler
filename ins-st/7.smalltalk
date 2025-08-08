@@ -1,0 +1,11 @@
+Object subclass: MinhaClasse [
+    F7 [
+        | i sum |
+        i := 0.
+        sum := 0.
+        [ i < 5 ] whileTrue: [
+            sum := sum + i.
+            i := i + 1
+        ]
+    ]
+]

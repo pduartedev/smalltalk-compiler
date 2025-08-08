@@ -1,0 +1,10 @@
+Object subclass: MinhaClasse [
+    F5 [
+        | x y |
+        x := 5.
+        y := 0.
+        x > 2 ifTrue: [
+            y := 1
+        ]
+    ]
+]

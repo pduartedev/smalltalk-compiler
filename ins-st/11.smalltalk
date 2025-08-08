@@ -1,0 +1,8 @@
+Object subclass: MinhaClasse [
+    F11 [
+        | a b result |
+        a := 1.
+        b := 0.
+        result := a > 0 and: [ b > 0 ]
+    ]
+]

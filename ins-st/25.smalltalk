@@ -1,0 +1,12 @@
+Object subclass: MinhaClasse [
+    F25: val com: times e: factor [
+        | i result |
+        i := 0.
+        result := val.
+        [ 
+            result := result * factor.
+            i := i + 1.
+            i < times
+        ] whileTrue
+    ]
+]

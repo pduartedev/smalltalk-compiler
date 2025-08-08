@@ -1,0 +1,37 @@
+# Arquivos gerados pelo JavaCC
+src/main/java/lexical/*.java
+!src/main/java/lexical/package-info.java
+
+# Arquivos compilados
+*.class
+target/
+build/
+
+# Diretório de saída da análise
+output/
+
+# Arquivos temporários
+*.swp
+*.tmp
+*~
+.DS_Store
+
+# Arquivos específicos de IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+nbproject/
+nb-configuration.xml
+nbactions.xml
+
+# Arquivos de log
+*.log
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+Object subclass: MinhaClasse [
+    F22: a com: b e: c [
+        | flag |
+        a < (b + c) ifTrue: [
+            flag := 0
+        ] ifFalse: [
+            flag := 1
+        ]
+    ]
+]

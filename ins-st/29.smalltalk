@@ -1,0 +1,35 @@
+Object subclass: MinhaClasse [
+    F50: n com: a e: b [
+        | sum temp r |
+        sum := 0.
+        temp := (a * b) - ((a + b) / 2).
+        
+        ((n \\ 2) = 0) and: [ (a + b) > 0 ] ifTrue: [
+            sum := (n * n) + (a * 2) - (b / 2)
+        ].
+        
+        ((a * a + b * b) \\ 3) = 0 ifTrue: [
+            sum := sum + ((a + b) * (a - b))
+        ] ifFalse: [
+            sum := sum - (((a + b) * (a + b)) / (n + 1))
+        ].
+        
+        [ n > 1 ] whileTrue: [
+            sum := sum + (n * temp) - (n \\ 3) + (a + b).
+            n := n - ((n \\ 2) + 1)
+        ].
+        
+        n := 0.
+        [ n < 4 ] whileTrue: [
+            sum := sum + (n * n) - ((a - b) * (n + 1)).
+            n := n + 1
+        ].
+        
+        sum > 100 ifTrue: [
+            r := ((sum / 3) - (self F50: n + 1 com: a - 1 e: b + 2)) * 2 + (a \\ 3).
+            sum := sum + r
+        ].
+        
+        ^sum + ((a * b) \\ (n + 2)) - temp
+    ]
+]

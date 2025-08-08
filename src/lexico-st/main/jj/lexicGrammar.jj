@@ -1,0 +1,283 @@
+options {
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+}
+
+PARSER_BEGIN(SmallTalkLexer)
+package lexical;
+
+public class SmallTalkLexer {
+  public static void main(String[] args) throws ParseException {
+    SmallTalkLexer lexer;
+    if (args.length == 0) {
+      System.out.println("Smalltalk Lexical Analyzer: Reading from standard input...");
+      lexer = new SmallTalkLexer(System.in);
+    } else if (args.length == 1) {
+      try {
+        lexer = new SmallTalkLexer(new java.io.FileInputStream(args[0]));
+      } catch (java.io.FileNotFoundException e) {
+        System.out.println("File " + args[0] + " not found.");
+        return;
+      }
+    } else {
+      System.out.println("Smalltalk Lexical Analyzer: Usage is one of:");
+      System.out.println("         java SmallTalkLexer < inputfile");
+      System.out.println("OR");
+      System.out.println("         java SmallTalkLexer inputfile");
+      return;
+    }
+
+    try {
+      lexer.Start();
+    } catch (ParseException e) {
+      System.out.println("Syntax Error: " + e.getMessage());
+    }
+    System.out.println("$ $");
+  }
+}
+
+PARSER_END(SmallTalkLexer)
+
+// Ignorando espaços em branco e comentários
+// separator ::= (whitespace | comment)*
+SKIP : {
+  < TOKEN_white_space: " " >
+  | < TOKEN_horizontal_tab: "\t" >
+  | < TOKEN_new_line: "\n" >
+  | < TOKEN_carriage_return: "\r" >
+  | < TOKEN_comment: "\"" (~["\""] | "\"\"")* "\"" > // Comentários com qualquer caractere que não seja aspas
+}
+
+/**
+* Definição dos tokens
+*
+* OBS: A ordem dos tokens foram definidos conforme o documento base.
+*/
+TOKEN : {
+
+// 1) Identificadores reservados (ou palavras reservadas)
+    < TOKEN_nil: "nil" >
+    | < TOKEN_true: "true" >
+    | < TOKEN_false: "false" >
+    | < TOKEN_self: "self" >
+    | < TOKEN_super: "super" >
+
+// 3) Definição de identificador diretamente (sem usar tokens auxiliares)
+    // identifier ::= letter (letter | digit)*
+    | < TOKEN_identifier: ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* >
+
+// 4) Definição de keywords conforme seção 3.5.4:
+    // keyword ::= identifier ':'
+    | < TOKEN_keyword: ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* ":" >
+
+// Símbolos de pontuação básicos
+| < TOKEN_colon: ":" >
+| < TOKEN_hash: "#" >
+| < TOKEN_period: "." >
+| < TOKEN_left_bracket: "[" >
+| < TOKEN_right_bracket: "]" >
+| < TOKEN_left_paren: "(" >
+| < TOKEN_right_paren: ")" >
+| < TOKEN_semicolon: ";" >
+| < TOKEN_comma: "," >
+| < TOKEN_pipe: "|" >
+| < TOKEN_array_begin: "#(" >
+| < TOKEN_left_brace: "{" >
+| < TOKEN_right_brace: "}" >
+
+// ACRÉSCIMOS
+| < TOKEN_subclass: " subclass:">
+
+// 5) Definição dos operadores conforme seção 3.5.5
+  // Binary Selector: um ou mais binary characters
+  // Conforme a especificação: binarySelector ::= binaryCharacter+
+  | < TOKEN_binary_selector: (["+", "-", "*", "/", "\\", "~", "<", ">", "=", "@", "%", "|", "&", "?", "!"])+ >
+
+  // 3. Return Operator
+  | < TOKEN_return_operator: "^" >
+
+  // 4. Assignment Operator
+  | < TOKEN_assignment_operator: ":=" >
+
+// 6) Definição de números conforme seção 3.5.6
+
+  // 1. Decimal Integer: sequência de dígitos
+  | < TOKEN_decimal_integer: (["0"-"9"])+ >
+
+  // 2. Radix Integer: [radixSpecifier]r[radixDigits]
+  // radixSpecifier é um número entre 2-36 e radixDigits são dígitos válidos naquela base
+  | < TOKEN_radix_integer: (["0"-"9"])+ ["r", "R"] (["0"-"9", "A"-"Z"])+ >
+
+  // 3. Float: mantissa [exponentLetter exponent]
+  // mantissa ::= digits '.' digits
+  // exponent ::= ['-']decimalInteger
+  // exponentLetter ::= 'e' | 'd' | 'q'
+  | < TOKEN_float: (["0"-"9"])+ "." (["0"-"9"])+ (["e", "E", "d", "D", "q", "Q"] (["-"])? (["0"-"9"])+)? >
+
+  // 4. Scaled Decimal conforme a definição completa:
+  // scaledDecimal ::= scaledMantissa 's' [fractionalDigits]
+  // scaledMantissa ::= decimalInteger | mantissa
+  // fractionalDigits ::= decimalInteger
+  | < TOKEN_scaled_decimal:
+        // Forma 1: número inteiro seguido por 's' e opcionalmente um inteiro para precisão
+        (["0"-"9"])+ "s" (["0"-"9"])* |
+
+        // Forma 2: número com ponto decimal seguido por 's' e opcionalmente um inteiro para precisão
+        (["0"-"9"])+ "." (["0"-"9"])+ "s" (["0"-"9"])*
+    >
+
+// 5) Quoted Character conforme seção 3.5.7:
+  // quotedCharacter ::= '$' character
+  // Um caractere entre aspas é um cifrão ($) seguido por qualquer caractere único
+  | < TOKEN_quoted_character: "$" (~[]) >
+
+// 6) Quoted String conforme seção 3.5.8:
+  // quotedString ::= stringDelimiter stringBody stringDelimiter
+  // stringBody ::= (nonStringDelimiter | (stringDelimiter stringDelimiter)*)
+  // stringDelimiter ::= "'" (uma aspas simples)
+  // nonStringDelimiter ::= "qualquer caractere exceto stringDelimiter"
+  | < TOKEN_quoted_string: "'" ( ~["'"] | "''" )* "'" >
+
+// 7) Hashed String conforme seção 3.5.9:
+  // hashedString ::= '#' quotedString
+  | < TOKEN_hashed_string: "#" "'" ( ~["'"] | "''" )* "'" >
+
+// 8) Quoted Selector conforme seção 3.5.10:
+  // quotedSelector ::= '#' (unarySelector | binarySelector | keywordSelector)
+  // - Um seletor unário precedido por # (exemplo: #size, #name)
+  | < TOKEN_quoted_unary_selector: "#" ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* >
+
+  // - Um seletor binário precedido por # (exemplo: #+, #-, #*)
+  | < TOKEN_quoted_binary_selector: "#" (["+", "-", "*", "/", "\\", "~", "<", ">", "=", "@", "%", "|", "&", "?", "!"])+ >
+
+  // - Um seletor de palavra-chave precedido por # (exemplo: #at:put:, #do:)
+  | < TOKEN_quoted_keyword_selector: "#" ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* ":" ( ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* ":" )* >
+}
+
+// Análise léxica principal - MODIFICADA PARA SÓ LER OS TOKENS
+void Start() :
+{
+  Token t;
+}
+{
+  {
+    try {
+      while(true) {
+        t = getNextToken();
+        if (t.kind == EOF) break;
+
+        // Imprime o tipo do token e seu conteúdo
+        switch(t.kind) {
+          case SmallTalkLexerConstants.TOKEN_nil:
+            System.out.println("TOKEN_nil " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_true:
+            System.out.println("TOKEN_true " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_false:
+            System.out.println("TOKEN_false " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_self:
+            System.out.println("TOKEN_self " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_super:
+            System.out.println("TOKEN_super " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_identifier:
+            System.out.println("TOKEN_identifier " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_keyword:
+            System.out.println("TOKEN_keyword " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_colon:
+            System.out.println("TOKEN_colon " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_hash:
+            System.out.println("TOKEN_hash " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_period:
+            System.out.println("TOKEN_period " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_left_bracket:
+            System.out.println("TOKEN_left_bracket " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_right_bracket:
+            System.out.println("TOKEN_right_bracket " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_left_paren:
+            System.out.println("TOKEN_left_paren " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_right_paren:
+            System.out.println("TOKEN_right_paren " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_semicolon:
+            System.out.println("TOKEN_semicolon " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_comma:
+            System.out.println("TOKEN_comma " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_pipe:
+            System.out.println("TOKEN_pipe " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_array_begin:
+            System.out.println("TOKEN_array_begin " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_left_brace:
+            System.out.println("TOKEN_left_brace " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_right_brace:
+            System.out.println("TOKEN_right_brace " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_binary_selector:
+            System.out.println("TOKEN_binary_selector " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_return_operator:
+            System.out.println("TOKEN_return_operator " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_assignment_operator:
+            System.out.println("TOKEN_assignment_operator " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_decimal_integer:
+            System.out.println("TOKEN_decimal_integer " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_radix_integer:
+            System.out.println("TOKEN_radix_integer " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_float:
+            System.out.println("TOKEN_float " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_scaled_decimal:
+            System.out.println("TOKEN_scaled_decimal " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_quoted_character:
+            System.out.println("TOKEN_quoted_character " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_quoted_string:
+            System.out.println("TOKEN_quoted_string " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_hashed_string:
+            System.out.println("TOKEN_hashed_string " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_quoted_unary_selector:
+            System.out.println("TOKEN_quoted_unary_selector " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_quoted_binary_selector:
+            System.out.println("TOKEN_quoted_binary_selector " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_quoted_keyword_selector:
+            System.out.println("TOKEN_quoted_keyword_selector " + t.image);
+            break;
+          case SmallTalkLexerConstants.TOKEN_subclass:
+            System.out.println("TOKEN_subclass " + t.image);
+            break;
+          default:
+            System.out.println("TOKEN_unknown");
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("Lexical error: " + e.getMessage());
+    }
+  }
+}

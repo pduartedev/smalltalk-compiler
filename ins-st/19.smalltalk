@@ -1,0 +1,6 @@
+Object subclass: MinhaClasse [
+    F19: a [
+        | r |
+        r := self square: a
+    ]
+]

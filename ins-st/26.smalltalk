@@ -1,0 +1,8 @@
+Object subclass: MinhaClasse [
+    power: base com: exp [
+        exp = 0 ifTrue: [
+            ^1
+        ].
+        ^base * (self power: base com: exp - 1)
+    ]
+]
