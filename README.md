@@ -10,7 +10,7 @@
 
 Este projeto implementa um **compilador completo para a linguagem Smalltalk**, desenvolvido como parte da disciplina de Compiladores 2025. O compilador segue a arquitetura clássica com análise léxica, sintática e semântica, incluindo **geração de frames automática**, **representação intermediária** e **pipeline de compilação totalmente automatizado**.
 
-**obs: Para fins de estudos, se você deseja montar o compilador de SmallTalk, o analisador léxico, sintático e semâbtico foram avaliados em nota máxima (100%) pelo professor, enquanto os laboratórios posteriores, de frames e representação intermediária EXIGE alterações. Portanto, não se baseiem neles. Futuramente irei corrigir-los.**
+**obs: Para fins de estudos, se você deseja montar um compilador de SmallTalk, o analisador léxico, sintático e semântico foram avaliados em nota máxima (100%) pelo professor, enquanto os laboratórios posteriores, de frames e representação intermediária EXIGEM alterações. Portanto, não se baseiem neles. Futuramente irei corrigir-los.**
 
 ## 📁 Estrutura do Projeto
 
