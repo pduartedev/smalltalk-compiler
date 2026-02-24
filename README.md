@@ -18,13 +18,13 @@ Este projeto implementa um **compilador completo para a linguagem Smalltalk**, d
 compilador-smalltalk/
 ├── src/                           # Código fonte principal
 │   ├── lexico-st/                 # 🔤 Analisador Léxico (JavaCC)
-│   │   ├── main/jj/               # Gramática JavaCC
+│   │   ├── main/jj/               # Gramática JavaCC (LAB 1)
 │   │   ├── scripts/               # Scripts de compilação/execução
 │   │   └── target/classes/        # Classes Java compiladas
-│   ├── semantico-st/              # 🧠 Analisador Semântico (C++)
-│   │   ├── src-gram-st/           # AST e comandos
-│   │   ├── frame-st/              # Sistema de frames (Lab 4)
-│   │   ├── tree-st/               # Representação intermediária (Lab 5)
+│   ├── semantico-st/              # 🧠 Analisador Semântico C++ (LAB 3)
+│   │   ├── src-gram-st/           # AST e comandos (LAB 2)
+│   │   ├── frame-st/              # Sistema de frames (LAB 4)
+│   │   ├── tree-st/               # Representação intermediária (LAB 5)
 │   │   └── *.cpp                  # Parser LR1, tabelas, etc.
 │   └── gramatica-st/              # 📋 Gramática e tabela LR1
 ├── ins-st/                        # 📝 Programas Smalltalk (30 arquivos)
